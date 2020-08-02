@@ -55,31 +55,33 @@ class ContactBook():
 		print('updating contact')
 		self.updated_phone = phone
 		self.contact_book_dict[(last_n, first_n)] = self.updated_phone
-		print(self.last_n, self.first_n, 'updated to: ', self.updated_phone)
+		print(last_n, first_n, 'updated to: ', self.updated_phone)
 
 	def delete_contact(self, first_n, last_n, phone):
-		answer = input('Are you sure you want to delete the contact? (Y/N)')
-		if answer == 'Y':
-			try:			
-				delete_contact_query = """DELETE FROM contacts WHERE phone_number = ?"""
-				self.execute_query(delete_contact_query, vars=[phone])
-				print('successfully deleted: ', first_n, last_n, phone)
-			except Error as e:
-				print(e)
-				print("\nThis contact does not exist! Check your inputs.\n")
-		elif answer == 'N':
-			answer_2 = input("\nWould you like to enter a new contact? (Y/N)\n")
-			if answer_2 == 'Y':
-				self.new_contact(first_n, last_n, phone)
-			else:
-				pass
+		# answer = input('Are you sure you want to delete the contact? (Y/N)')
+		# if answer == 'Y':
+		try:			
+			delete_contact_query = """DELETE FROM contacts WHERE phone_number = ?"""
+			self.execute_query(delete_contact_query, vars=[phone])
+			print('successfully deleted: ', first_n, last_n, phone)
+		except Error as e:
+			print(e)
+			print("\nThis contact does not exist! Check your inputs.\n")
+		# elif answer == 'N':
+		# 	answer_2 = input("\nWould you like to enter a new contact? (Y/N)\n")
+		# 	if answer_2 == 'Y':
+		# 		self.new_contact(first_n, last_n, phone)
+		# 	else:
+		# 		pass
 		else:
 			pass
 
 	def list_contacts(self):
 		list_all_contacts_query = """SELECT * FROM contacts;"""
 		all_contacts = self.execute_query(list_all_contacts_query)
-		print(all_contacts)
+		for contact in all_contacts:
+			print(contact[0], contact[1], contact[2])
+		return all_contacts
 
 
 	def ask_user(self, first_n, last_n, phone, entry_type):
@@ -95,19 +97,19 @@ class ContactBook():
 		else:
 			pass
 
-def main():
-	parser = argparse.ArgumentParser(description='Enter information to create a new entry in the contact book.')
-	parser.add_argument('-f', '--first', type=str, metavar='', required=True, help='Enter first name')
-	parser.add_argument('-l', '--last', type=str, metavar='', required=True, help='Enter last name')
-	parser.add_argument('-p', '--phone', type=int, metavar='', help='Enter phone number')
-	parser.add_argument('-e', '--entry_type', type=int, metavar='', help='1 = new entry, 2 = update entry, 3 = delete, 4 = list_contacts')
-	args = parser.parse_args()
+# def main():
+# 	parser = argparse.ArgumentParser(description='Enter information to create a new entry in the contact book.')
+# 	parser.add_argument('-f', '--first', type=str, metavar='', required=True, help='Enter first name')
+# 	parser.add_argument('-l', '--last', type=str, metavar='', required=True, help='Enter last name')
+# 	parser.add_argument('-p', '--phone', type=int, metavar='', help='Enter phone number')
+# 	parser.add_argument('-e', '--entry_type', type=int, metavar='', help='1 = new entry, 2 = update entry, 3 = delete, 4 = list_contacts')
+# 	args = parser.parse_args()
 
-	contact_book = ContactBook()
-	contact_book.ask_user(args.first, args.last, args.phone, args.entry_type)
+# 	contact_book = ContactBook()
+# 	contact_book.ask_user(args.first, args.last, args.phone, args.entry_type)
 
-	if contact_book.connection:
-		contact_book.connection.close()
+# 	if contact_book.connection:
+# 		contact_book.connection.close()
 
-if __name__ == '__main__':
-	main()
+# if __name__ == '__main__':
+# 	main()
