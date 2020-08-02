@@ -58,8 +58,6 @@ class ContactBook():
 		print(last_n, first_n, 'updated to: ', self.updated_phone)
 
 	def delete_contact(self, first_n, last_n, phone):
-		# answer = input('Are you sure you want to delete the contact? (Y/N)')
-		# if answer == 'Y':
 		try:			
 			delete_contact_query = """DELETE FROM contacts WHERE phone_number = ?"""
 			self.execute_query(delete_contact_query, vars=[phone])
@@ -67,12 +65,6 @@ class ContactBook():
 		except Error as e:
 			print(e)
 			print("\nThis contact does not exist! Check your inputs.\n")
-		# elif answer == 'N':
-		# 	answer_2 = input("\nWould you like to enter a new contact? (Y/N)\n")
-		# 	if answer_2 == 'Y':
-		# 		self.new_contact(first_n, last_n, phone)
-		# 	else:
-		# 		pass
 		else:
 			pass
 
@@ -81,6 +73,7 @@ class ContactBook():
 		all_contacts = self.execute_query(list_all_contacts_query)
 		for contact in all_contacts:
 			print(contact[0], contact[1], contact[2])
+		all_contacts.sort(key=lambda x:x[1])
 		return all_contacts
 
 
